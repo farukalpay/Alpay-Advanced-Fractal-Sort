@@ -17,21 +17,28 @@ static const double PIVOT_OUTLIER_FRAC = 0.15;
  * 1) Bidirectional Triple Pass
  *****************************************************************************/
 void alpayTripleFixBidirectional(std::vector<int> &arr, int start, int end) {
-    if (start >= end) return;
+    if (start >= end) return; // Size = 0 or 1 (already sorted)
+    if (end - start == 1) { // Size = 2
+        if (arr[start] > arr[start + 1]) {
+            std::swap(arr[start], arr[start + 1]);
+        }
+        return;
+    }
+    // For larger sizes (>= 3), proceed with existing triple pass logic
     bool changed = true;
     while (changed) {
         changed = false;
         // Forward pass
         for (int i = start; i + 2 <= end; i++) {
-            if (arr[i] > arr[i+1])    { std::swap(arr[i], arr[i+1]); changed = true; }
-            if (arr[i+1] > arr[i+2])  { std::swap(arr[i+1], arr[i+2]); changed = true; }
-            if (arr[i] > arr[i+1])    { std::swap(arr[i], arr[i+1]);   changed = true; }
+            if (arr[i] > arr[i + 1])    { std::swap(arr[i], arr[i + 1]); changed = true; }
+            if (arr[i + 1] > arr[i + 2]) { std::swap(arr[i + 1], arr[i + 2]); changed = true; }
+            if (arr[i] > arr[i + 1])    { std::swap(arr[i], arr[i + 1]); changed = true; }
         }
         // Backward pass
         for (int i = end - 2; i >= start; i--) {
-            if (arr[i] > arr[i+1])    { std::swap(arr[i], arr[i+1]); changed = true; }
-            if (arr[i+1] > arr[i+2])  { std::swap(arr[i+1], arr[i+2]); changed = true; }
-            if (arr[i] > arr[i+1])    { std::swap(arr[i], arr[i+1]);   changed = true; }
+            if (arr[i] > arr[i + 1])    { std::swap(arr[i], arr[i + 1]); changed = true; }
+            if (arr[i + 1] > arr[i + 2]) { std::swap(arr[i + 1], arr[i + 2]); changed = true; }
+            if (arr[i] > arr[i + 1])    { std::swap(arr[i], arr[i + 1]); changed = true; }
         }
     }
 }
