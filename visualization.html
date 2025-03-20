@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn Alpay's Advanced Fractal Sort algorithm through an interactive game. Visualize and understand this innovative O(n log log n) sorting method with hands-on challenges.">
+  <meta name="keywords" content="sorting algorithm, fractal sort, algorithm visualization, computer science, educational game, Alpay's Advanced Fractal Sort">
+  <meta name="author" content="Algorithm Visualizer">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Alpay's Fractal Sort: Interactive Algorithm Game">
+  <meta property="og:description" content="Master the innovative Alpay's Advanced Fractal Sort algorithm through an interactive visualization game. Perfect for computer science students and algorithm enthusiasts.">
+  <meta property="og:url" content="https://yourdomain.com/fractal-sort-game">
+  <meta property="og:image" content="https://yourdomain.com/images/fractal-sort-preview.jpg">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Alpay's Fractal Sort: Interactive Algorithm Game">
+  <meta name="twitter:description" content="Master the innovative Alpay's Advanced Fractal Sort algorithm through an interactive visualization game.">
+  <meta name="twitter:image" content="https://yourdomain.com/images/fractal-sort-preview.jpg">
+  
+  <title>Alpay's Fractal Sort: Interactive Algorithm Visualization Game</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%94%84%3C/text%3E%3C/svg%3E">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========================
+       THEME & BASE STYLES
+       ======================== */
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-primary: #6366f1;
+      --accent-secondary: #8b5cf6;
+      --accent-tertiary: #ec4899;
+      --accent-quaternary: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border-radius-sm: 8px;
+      --border-radius: 12px;
+      --border-radius-lg: 16px;
+      --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --box-shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      --gradient-secondary: linear-gradient(135deg, var(--accent-tertiary), var(--accent-quaternary));
+      --bg-secondary-rgb: 30, 41, 59;
+    }
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #e2e8f0;
+      --bg-tertiary: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --bg-secondary-rgb: 226, 232, 240;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      background-image: radial-gradient(circle at 20% 30%, rgba(99,102,241,0.15) 0%, transparent 30%),
+                        radial-gradient(circle at 80% 70%, rgba(139,92,246,0.15) 0%, transparent 30%),
+                        radial-gradient(circle at 50% 50%, rgba(236,72,153,0.1) 0%, transparent 50%);
+      background-attachment: fixed;
+      transition: var(--transition);
+    }
+    *:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .skip-link { position: absolute; top: -40px; left: 0; background: var(--accent-primary); color: white; padding: 8px; z-index: 100; transition: top 0.3s; }
+    .skip-link:focus { top: 0; }
+    /* ========================
+       HEADER
+       ======================== */
+    header { position: relative; text-align: center; margin-bottom: 3rem; padding-top: 2rem; }
+    .theme-toggle {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--bg-secondary); border: none; color: var(--text-primary);
+      padding: 0.5rem; border-radius: 50%; width: 40px; height: 40px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: var(--transition); box-shadow: var(--box-shadow);
+    }
+    .theme-toggle:hover { transform: scale(1.1); }
+    .title {
+      font-family: 'Montserrat', sans-serif; font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;
+      background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text;
+      color: transparent; text-shadow: 0 0 20px rgba(99,102,241,0.3); letter-spacing: -0.5px;
+    }
+    .subtitle { font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-secondary); font-weight: 300; max-width: 800px; margin: 0 auto 1rem; }
+    /* ========================
+       MAIN NAVIGATION
+       ======================== */
+    .main-nav { display: flex; justify-content: center; margin: 2rem 0; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-tab {
+      background: var(--bg-secondary); color: var(--text-primary); border: none; padding: 0.6rem 1.2rem;
+      border-radius: var(--border-radius); font-family: 'Poppins', sans-serif; font-weight: 500; cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    .nav-tab:hover { background: var(--bg-tertiary); }
+    .nav-tab.active { background: var(--gradient-primary); color: white; }
+    /* ========================
+       GAME CONTROLS
+       ======================== */
+    .game-controls {
+      display: flex; justify-content: center; gap: 1rem; margin: 1.5rem 0; flex-wrap: wrap;
+      position: sticky; top: 0; z-index: 10; padding: 1rem;
+      background: rgba(15,23,42,0.8); backdrop-filter: blur(10px);
+      border-radius: var(--border-radius); box-shadow: var(--box-shadow);
+    }
+    [data-theme="light"] .game-controls { background: rgba(248,250,252,0.8); }
+    .btn {
+      background: var(--bg-secondary); color: var(--text-primary); border: none;
+      padding: 0.8rem 1.5rem; border-radius: var(--border-radius);
+      font-family: 'Poppins', sans-serif; font-weight: 500; cursor: pointer;
+      transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;
+      box-shadow: var(--box-shadow); min-width: 140px; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .btn::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.7s;
+    }
+    .btn:hover::before { left: 100%; }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--box-shadow-lg); }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--gradient-primary); color: white; }
+    .btn-secondary { background: var(--bg-tertiary); }
+    .btn-action { background: var(--gradient-secondary); color: white; }
+    .btn-icon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border-radius: 50%; min-width: unset; }
+    .slider-container { display: flex; align-items: center; gap: 0.5rem; }
+    .slider-label { font-size: 0.9rem; color: var(--text-secondary); min-width: 100px; }
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 150px; height: 8px; background: var(--bg-secondary);
+      border-radius: 5px; outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--accent-primary); cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.1); background: var(--accent-secondary);
+    }
+    /* ========================
+       PROGRESS BAR
+       ======================== */
+    .progress-container { width: 100%; height: 6px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden; margin: 1.5rem 0; }
+    .progress-bar {
+      height: 100%; background: var(--gradient-primary); width: 0;
+      transition: width 0.5s ease; border-radius: 3px; position: relative;
+    }
+    .progress-bar::after {
+      content: ''; position: absolute; top: 0; right: 0; bottom: 0;
+      width: 100px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.3));
+      transform: translateX(100%); animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer { 100% { transform: translateX(-100%); } }
+    /* ========================
+       STATS PANEL
+       ======================== */
+    .stats-panel {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--border-radius);
+      text-align: center; box-shadow: var(--box-shadow); transition: var(--transition);
+      border-top: 4px solid var(--accent-primary);
+    }
+    .stat-card:nth-child(2) { border-top-color: var(--accent-secondary); }
+    .stat-card:nth-child(3) { border-top-color: var(--accent-tertiary); }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: var(--box-shadow-lg); }
+    .stat-value {
+      font-size: 2rem; font-weight: 700; margin: 0.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--gradient-primary); -webkit-background-clip: text;
+      background-clip: text; color: transparent;
+    }
+    .stat-label {
+      font-size: 0.9rem; color: var(--text-secondary);
+      font-weight: 500; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .stat-icon {
+      background: var(--bg-tertiary); width: 40px; height: 40px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 0.5rem;
+    }
+    /* ========================
+       GAME BOARD
+       ======================== */
+    .game-board {
+      background: rgba(var(--bg-secondary-rgb), 0.8);
+      border-radius: var(--border-radius-lg); padding: 2rem;
+      margin-bottom: 3rem; box-shadow: var(--box-shadow-lg); position: relative;
+      overflow: hidden; min-height: 600px; backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1); transition: var(--transition);
+    }
+    .game-board::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(45deg, rgba(99,102,241,0.05), rgba(236,72,153,0.05));
+      z-index: -1;
+    }
+    .game-tabs {
+      display: flex; border-bottom: 2px solid var(--bg-tertiary);
+      margin-bottom: 2rem; overflow-x: auto; padding-bottom: 0.5rem;
+    }
+    .game-tab {
+      padding: 0.8rem 1.5rem; background: none; border: none;
+      color: var(--text-secondary); font-weight: 500; cursor: pointer;
+      transition: var(--transition-fast); position: relative; white-space: nowrap;
+    }
+    .game-tab:hover { color: var(--text-primary); }
+    .game-tab.active { color: var(--accent-primary); }
+    .game-tab.active::after {
+      content: ''; position: absolute; bottom: -0.5rem; left: 0;
+      width: 100%; height: 3px; background: var(--gradient-primary);
+      border-radius: 3px 3px 0 0;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.5s ease forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Step Explanation */
+    .step-explanation {
+      background: var(--bg-tertiary); padding: 1.5rem;
+      border-radius: var(--border-radius); margin: 1.5rem 0;
+      position: relative; border-left: 4px solid var(--accent-primary);
+      transition: var(--transition);
+    }
+    .step-explanation.highlight { transform: scale(1.02); box-shadow: var(--box-shadow); }
+    .step-title {
+      font-weight: 600; margin-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .step-title-icon {
+      background: var(--accent-primary); width: 24px; height: 24px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; color: white;
+    }
+    /* Visualization Area */
+    .visualization-area {
+      width: 100%; min-height: 400px; position: relative;
+      margin-top: 2rem; padding: 1rem; background: var(--bg-secondary);
+      border-radius: var(--border-radius); overflow: hidden; transition: var(--transition);
+    }
+    /* Array visualization */
+    .array-container {
+      display: flex; justify-content: center; gap: 6px; margin: 2rem 0;
+      height: 230px; align-items: flex-end; padding: 1rem; position: relative;
+    }
+    .array-element {
+      background: var(--gradient-primary); border-radius: 6px 6px 0 0;
+      transition: transform 0.5s ease, height 0.5s ease, background 0.3s ease;
+      position: relative; min-width: 35px; display: flex; justify-content: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .array-element.comparing {
+      background: var(--gradient-secondary); animation: pulse 0.8s infinite alternate;
+      z-index: 1;
+    }
+    .array-element.sorted { background: linear-gradient(to top, var(--success), #4ade80); }
+    .array-element.pivot { background: var(--gradient-secondary); border: 2px solid white; z-index: 2; }
+    .array-element.swapping { animation: bounce 0.5s ease; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    .element-value { position: absolute; bottom: -25px; font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
+    /* Buckets */
+    .buckets-container {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 3rem;
+    }
+    .bucket {
+      background: var(--bg-secondary); border-radius: var(--border-radius);
+      padding: 1.5rem; min-width: 180px; min-height: 150px; position: relative;
+      border: 1px dashed rgba(255,255,255,0.2); box-shadow: var(--box-shadow);
+      transition: var(--transition);
+    }
+    .bucket:hover { transform: translateY(-5px); box-shadow: var(--box-shadow-lg); }
+    .bucket-label {
+      position: absolute; top: -12px; left: 50%;
+      transform: translateX(-50%); background: var(--bg-tertiary);
+      padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem;
+      white-space: nowrap; box-shadow: var(--box-shadow); font-weight: 500;
+    }
+    .bucket-elements {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem; justify-content: center;
+    }
+    .bucket-element {
+      width: 36px; height: 36px; background: var(--gradient-primary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 600; color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: var(--transition-fast);
+    }
+    .bucket-element:hover { transform: scale(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    /* Min Heap Visualization */
+    .heap-visualization { margin-top: 3rem; }
+    .heap-tree {
+      width: 100%; max-width: 500px; height: 250px; margin: 0 auto; position: relative;
+    }
+    .heap-node {
+      position: absolute; width: 40px; height: 40px; background: var(--gradient-primary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 600; box-shadow: var(--box-shadow); transition: var(--transition);
+    }
+    .heap-node.extracting { animation: extractMin 1s forwards; }
+    @keyframes extractMin { 0% { transform: scale(1); } 50% { transform: scale(1.2); box-shadow: 0 0 20px rgba(99,102,241,0.5); } 100% { transform: translateY(100px) scale(0.8); opacity: 0; } }
+    .heap-edge {
+      position: absolute; background: var(--text-secondary); height: 2px;
+      transform-origin: left center;
+    }
+    .merged-array {
+      display: flex; justify-content: center; gap: 8px; margin-top: 2rem; flex-wrap: wrap;
+    }
+    .merged-element {
+      width: 40px; height: 40px; background: linear-gradient(to top, var(--success), #4ade80);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      font-weight: 600; color: white; box-shadow: var(--box-shadow);
+      animation: fadeIn 0.5s ease forwards;
+    }
+    /* Animations */
+    @keyframes pulse {
+      from { transform: scale(1); box-shadow: 0 0 0 rgba(245,158,11,0); }
+      to { transform: scale(1.05); box-shadow: 0 0 20px rgba(245,158,11,0.5); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* ========================
+       CHALLENGE SECTION
+       ======================== */
+    .challenge-section { margin: 3rem 0; }
+    .challenge-card {
+      background: rgba(var(--bg-secondary-rgb), 0.8);
+      border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;
+      box-shadow: var(--box-shadow); border: 1px solid rgba(255,255,255,0.1);
+      position: relative; overflow: hidden; transition: var(--transition);
+    }
+    .challenge-card:hover { transform: translateY(-5px); box-shadow: var(--box-shadow-lg); }
+    .challenge-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--gradient-primary);
+    }
+    .challenge-card h3 {
+      color: var(--text-primary); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .challenge-badge {
+      background: var(--gradient-primary); color: white;
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; font-weight: 600;
+    }
+    /* Mini-game */
+    .mini-game { margin: 2rem 0; text-align: center; }
+    .mini-game-elements { display: flex; justify-content: center; gap: 1rem; margin: 1.5rem 0; flex-wrap: wrap; }
+    .mini-game-element {
+      width: 50px; height: 50px; background: var(--bg-tertiary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 600; cursor: pointer; transition: var(--transition);
+      border: 2px solid transparent; color: var(--text-primary);
+    }
+    .mini-game-element:hover {
+      transform: scale(1.1); border-color: var(--accent-primary);
+      box-shadow: 0 0 15px rgba(99,102,241,0.3);
+    }
+    .mini-game-element.selected {
+      background: var(--gradient-primary); color: white;
+      transform: scale(1.1); box-shadow: var(--box-shadow);
+    }
+    /* ========================
+       ACCORDION
+       ======================== */
+    .accordion { margin: 2rem 0; }
+    .accordion-item {
+      margin-bottom: 1rem; border-radius: var(--border-radius);
+      overflow: hidden; box-shadow: var(--box-shadow);
+    }
+    .accordion-header {
+      background: var(--bg-secondary); padding: 1rem 1.5rem;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: space-between; user-select: none;
+      transition: var(--transition-fast);
+    }
+    .accordion-header:hover { background: var(--bg-tertiary); }
+    .accordion-body {
+      background: var(--bg-tertiary); padding: 0;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .accordion-body.active { padding: 1.5rem; max-height: 500px; }
+    .accordion-icon { transition: transform 0.3s ease; }
+    .accordion-header.active .accordion-icon { transform: rotate(180deg); }
+    /* ========================
+       ACHIEVEMENTS SECTION
+       ======================== */
+    .achievements-section { margin: 3rem 0; }
+    .achievements-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem; margin-top: 2rem;
+    }
+    .achievement-card {
+      background: var(--bg-secondary); border-radius: var(--border-radius);
+      padding: 1.5rem; text-align: center; box-shadow: var(--box-shadow);
+      transition: var(--transition); position: relative; overflow: hidden;
+    }
+    .achievement-card::after {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 5px; background: var(--gradient-primary);
+    }
+    .achievement-card:hover { transform: translateY(-5px); box-shadow: var(--box-shadow-lg); }
+    .achievement-card.locked { opacity: 0.7; }
+    .achievement-icon {
+      width: 60px; height: 60px; background: var(--bg-tertiary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem; font-size: 1.5rem;
+    }
+    .achievement-card.unlocked .achievement-icon {
+      background: var(--gradient-primary); color: white;
+      animation: unlockAchievement 1s ease;
+    }
+    @keyframes unlockAchievement {
+      0% { transform: scale(0.8); }
+      50% { transform: scale(1.2); box-shadow: 0 0 30px rgba(99,102,241,0.5); }
+      100% { transform: scale(1); }
+    }
+    .achievement-title { font-weight: 600; margin-bottom: 0.5rem; }
+    .achievement-description { font-size: 0.9rem; color: var(--text-secondary); }
+    /* Level indicator */
+    .level-indicator {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--bg-tertiary); padding: 0.4rem 0.8rem;
+      border-radius: 20px; font-size: 0.9rem; font-weight: 600;
+      display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--box-shadow);
+    }
+    .level-badge {
+      background: var(--gradient-primary); color: white;
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
+    }
+    /* ========================
+       TOOLTIP
+       ======================== */
+    .tooltip { position: relative; display: inline-block; }
+    .tooltip .tooltip-text {
+      visibility: hidden; width: 200px; background-color: var(--bg-tertiary);
+      color: var(--text-primary); text-align: center; border-radius: 6px;
+      padding: 0.5rem; position: absolute; z-index: 1;
+      bottom: 125%; left: 50%; transform: translateX(-50%);
+      opacity: 0; transition: opacity 0.3s; box-shadow: var(--box-shadow);
+      font-size: 0.8rem;
+    }
+    .tooltip .tooltip-text::after {
+      content: ""; position: absolute; top: 100%; left: 50%;
+      margin-left: -5px; border-width: 5px; border-style: solid;
+      border-color: var(--bg-tertiary) transparent transparent transparent;
+    }
+    .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+    /* ========================
+       MODAL
+       ======================== */
+    .modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.7); z-index: 1000;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .modal.show { opacity: 1; pointer-events: auto; }
+    .modal-content {
+      background: var(--bg-secondary); border-radius: var(--border-radius);
+      width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+      padding: 2rem; position: relative; transform: scale(0.9);
+      transition: transform 0.3s ease; box-shadow: var(--box-shadow-lg);
+    }
+    .modal.show .modal-content { transform: scale(1); }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; color: var(--text-secondary);
+      font-size: 1.5rem; cursor: pointer; transition: var(--transition-fast);
+    }
+    .modal-close:hover { color: var(--text-primary); transform: rotate(90deg); }
+    .modal-title {
+      margin-bottom: 1.5rem; font-size: 1.8rem; font-weight: 700;
+      background: var(--gradient-primary); -webkit-background-clip: text;
+      background-clip: text; color: transparent;
+    }
+    /* ========================
+       NOTIFICATIONS
+       ======================== */
+    .notification-container {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+    }
+    .notification {
+      background: var(--bg-secondary); color: var(--text-primary);
+      padding: 1rem 1.5rem; border-radius: var(--border-radius);
+      margin-bottom: 10px; box-shadow: var(--box-shadow-lg);
+      display: flex; align-items: center; gap: 0.8rem;
+      transform: translateX(120%); transition: transform 0.3s ease;
+      max-width: 350px;
+    }
+    .notification.show { transform: translateX(0); }
+    .notification-icon {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .notification-success .notification-icon { background: var(--success); color: white; }
+    .notification-warning .notification-icon { background: var(--warning); color: white; }
+    .notification-error .notification-icon { background: var(--danger); color: white; }
+    .notification-close {
+      margin-left: auto; background: none; border: none;
+      color: var(--text-secondary); cursor: pointer; transition: var(--transition-fast);
+    }
+    .notification-close:hover { color: var(--text-primary); }
+    /* ========================
+       FOOTER
+       ======================== */
+    footer {
+      text-align: center; padding: 3rem 0 2rem;
+      color: var(--text-secondary); font-size: 0.9rem; position: relative;
+    }
+    .footer-links {
+      display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .footer-link { color: var(--text-secondary); text-decoration: none; transition: var(--transition-fast); }
+    .footer-link:hover { color: var(--accent-primary); }
+    .back-to-top {
+      position: absolute; top: -20px; left: 50%;
+      transform: translateX(-50%); background: var(--bg-secondary);
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-primary); text-decoration: none;
+      box-shadow: var(--box-shadow); transition: var(--transition);
+    }
+    .back-to-top:hover { transform: translateX(-50%) translateY(-5px); box-shadow: var(--box-shadow-lg); }
+    /* ========================
+       RESPONSIVE STYLES
+       ======================== */
+    @media (max-width: 1024px) {
+      .container { padding: 1.5rem 1rem; }
+      .game-board { padding: 1.5rem; }
+      .achievements-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    }
+    @media (max-width: 768px) {
+      .title { font-size: 2.2rem; }
+      .game-controls { flex-direction: column; align-items: stretch; }
+      .btn { width: 100%; }
+      .slider-container { flex-direction: column; align-items: stretch; }
+      input[type="range"] { width: 100%; }
+      .stats-panel { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+      .array-element { min-width: 28px; }
+      .step-explanation { padding: 1rem; }
+      .achievements-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 576px) {
+      .array-element { min-width: 20px; }
+      .element-value { font-size: 0.7rem; }
+      .bucket { min-width: 100%; }
+      .game-tabs { flex-wrap: wrap; }
+      .notification { max-width: 300px; }
+    }
+    /* ========================
+       PRINT STYLES
+       ======================== */
+    @media print {
+      .game-controls, .btn, .game-tabs, .modal, .notification-container { display: none !important; }
+      .container { padding: 0; max-width: 100%; }
+      body { background: white; color: black; }
+      .game-board, .step-explanation, .bucket, .array-element, .achievement-card {
+        box-shadow: none; border: 1px solid #ddd;
+      }
+    }
+    /* ========================
+       ACCESSIBILITY
+       ======================== */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    }
+    /* ========================
+       CODE BLOCK STYLING
+       ======================== */
+    .code-section { margin-top: 20px; border-radius: var(--border-radius); overflow: hidden; }
+    .code-block {
+      background-color: #1e1e1e; color: #d4d4d4;
+      padding: 1.5rem; border-radius: var(--border-radius);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+      line-height: 1.5; overflow-x: auto; white-space: pre; box-shadow: var(--box-shadow);
+    }
+    .code-keyword { color: #569cd6; }
+    .code-type { color: #4ec9b0; }
+    .code-function { color: #dcdcaa; }
+    .code-string { color: #ce9178; }
+    .code-comment { color: #6a9955; }
+    .code-number { color: #b5cea8; }
+    /* ========================
+       MATH EQUATION STYLES
+       ======================== */
+    .math-equation {
+      font-family: 'JetBrains Mono', monospace; font-style: italic;
+      padding: 0.2rem 0.4rem; background: var(--bg-tertiary);
+      border-radius: var(--border-radius-sm); display: inline-block;
+      margin: 0 0.2rem; font-weight: 500;
+    }
+    /* ========================
+       FEATURE CARD STYLES
+       ======================== */
+    .feature-card {
+      background: var(--bg-secondary); border-radius: var(--border-radius);
+      padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--box-shadow);
+      border-left: 4px solid var(--accent-primary); transition: var(--transition);
+    }
+    .feature-card:hover { transform: translateY(-5px); box-shadow: var(--box-shadow-lg); }
+    .feature-card h4 {
+      font-weight: 600; margin-bottom: 0.8rem; color: var(--text-primary);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .feature-icon {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--gradient-primary); color: white;
+    }
+    /* ========================
+       HELP MODAL STYLING
+       ======================== */
+    .help-content { margin: 1.5rem 0; }
+    .help-section { margin-bottom: 2rem; }
+    .help-title {
+      font-weight: 600; margin-bottom: 1rem; color: var(--accent-primary);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .help-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--gradient-primary); color: white; font-size: 0.8rem;
+    }
+    .step-detail { margin-left: 2rem; margin-bottom: 1rem; padding-left: 1rem; border-left: 2px solid var(--accent-primary); }
+    .algorithm-step {
+      background: var(--bg-secondary); padding: 1.5rem;
+      border-radius: var(--border-radius); margin-bottom: 1.5rem;
+      box-shadow: var(--box-shadow); position: relative; overflow: hidden;
+      transition: var(--transition);
+    }
+    .algorithm-step:hover { transform: translateY(-3px); box-shadow: var(--box-shadow-lg); }
+    .algorithm-step::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%; background: var(--gradient-primary);
+    }
+    .step-header {
+      font-weight: 600; margin-bottom: 1rem; display: flex;
+      align-items: center; gap: 0.5rem;
+    }
+    .step-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--gradient-primary); color: white; font-weight: 500;
+      flex-shrink: 0;
+    }
+    .step-content { margin-left: 2.5rem; }
+    .step-content p { margin-bottom: 0.8rem; }
+    .step-content ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 0.8rem; }
+    .step-content li { margin-bottom: 0.4rem; }
+    /* ========================
+       ENHANCED TOOLTIPS
+       ======================== */
+    .enhanced-tooltip {
+      position: relative; display: inline-block;
+      border-bottom: 1px dotted var(--text-secondary); cursor: help;
+    }
+    .enhanced-tooltip .tooltip-content {
+      visibility: hidden; width: 250px; background: var(--bg-secondary);
+      color: var(--text-primary); border-radius: var(--border-radius);
+      padding: 1rem; position: absolute; z-index: 10;
+      bottom: 125%; left: 50%; transform: translateX(-50%);
+      opacity: 0; transition: opacity 0.3s; box-shadow: var(--box-shadow-lg);
+      font-weight: normal; font-size: 0.9rem; text-align: left; pointer-events: none;
+    }
+    .enhanced-tooltip:hover .tooltip-content { visibility: visible; opacity: 1; }
+    .enhanced-tooltip .tooltip-content::after {
+      content: ''; position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%); border-width: 10px; border-style: solid;
+      border-color: var(--bg-secondary) transparent transparent transparent;
+    }
+    /* ========================
+       ENHANCED HELP MODAL SCROLL
+       ======================== */
+    .help-modal-content {
+      max-width: 700px; max-height: 80vh; overflow-y: auto; padding-right: 1rem;
+    }
+    .help-modal-content::-webkit-scrollbar { width: 8px; }
+    .help-modal-content::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: 4px; }
+    .help-modal-content::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 4px; }
+    .help-modal-content::-webkit-scrollbar-thumb:hover { background: var(--accent-secondary); }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <div class="container">
+    <header>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" id="theme-icon">
+          <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+        </svg>
+      </button>
+      <h1 class="title">Alpay's Fractal Sort</h1>
+      <p class="subtitle">Master the innovative sorting algorithm through an interactive game experience</p>
+      <div class="main-nav">
+        <button class="nav-tab active" data-tab="game">Algorithm Game</button>
+        <button class="nav-tab" data-tab="learn">Learn</button>
+        <button class="nav-tab" data-tab="challenges">Challenges</button>
+        <button class="nav-tab" data-tab="achievements">Achievements</button>
+      </div>
+    </header>
+    
+    <main id="main-content">
+      <!-- GAME TAB CONTENT -->
+      <div class="tab-content active" id="game-tab">
+        <div class="stats-panel">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M4 11a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm6-1a1 1 0 1 0 2 0 1 1 0 0 0-2 0zM1.5 11a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1h-13zM1.5 4a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1h-13zM4 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm6-1a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/>
+              </svg>
+            </div>
+            <div class="stat-value" id="comparison-count">0</div>
+            <div class="stat-label">Comparisons</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+              </svg>
+            </div>
+            <div class="stat-value" id="sort-score">0</div>
+            <div class="stat-label">Score</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+              </svg>
+            </div>
+            <div class="stat-value" id="time-taken">0s</div>
+            <div class="stat-label">Time</div>
+          </div>
+        </div>
+        
+        <div class="game-controls">
+          <button class="btn btn-primary" id="generate-array" aria-label="Generate new array">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            New Array
+          </button>
+          <button class="btn btn-action" id="start-sort" aria-label="Start sorting">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+            </svg>
+            Start Sorting
+          </button>
+          <button class="btn btn-secondary" id="step-button" aria-label="Step through algorithm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"/>
+              <path fill-rule="evenodd" d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"/>
+            </svg>
+            Step-by-Step
+          </button>
+          <div class="slider-container">
+            <label for="speed-slider" class="slider-label">Speed:</label>
+            <input type="range" id="speed-slider" min="1" max="10" value="5" aria-label="Animation speed">
+          </div>
+          <button class="btn btn-secondary" id="help-button" aria-label="Help">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+            </svg>
+            Help
+          </button>
+        </div>
+        
+        <div class="progress-container">
+          <div class="progress-bar" id="sort-progress"></div>
+        </div>
+        
+        <div class="game-board">
+          <div class="level-indicator">
+            <span class="level-badge" id="current-level">1</span>
+            <span>Level</span>
+          </div>
+          <div class="game-tabs">
+            <button class="game-tab active" data-game-tab="visualization">Visualization</button>
+            <button class="game-tab" data-game-tab="algorithm">Algorithm Steps</button>
+            <button class="game-tab" data-game-tab="code">Code View</button>
+          </div>
+          <!-- Visualization Tab -->
+          <div class="tab-content active" id="visualization-tab">
+            <div class="step-explanation">
+              <h3 class="step-title">
+                <span class="step-title-icon">1</span>
+                Welcome to Alpay's Fractal Sort Game
+              </h3>
+              <p>This interactive visualization will help you understand how this innovative sorting algorithm works through gameplay. Generate a new array to begin!</p>
+            </div>
+            <div class="array-container" id="array-container">
+              <!-- Array elements will be generated here -->
+            </div>
+            <div class="visualization-area" id="visualization-area">
+              <!-- Buckets will appear here during partitioning -->
+              <div class="buckets-container" id="buckets-container" style="display: none;">
+                <!-- Buckets will be generated here -->
+              </div>
+              <!-- Min-heap visualization for k-way merge -->
+              <div class="heap-visualization" id="heap-visualization" style="display: none;">
+                <h3>Min-Heap K-Way Merge</h3>
+                <div class="heap-tree" id="heap-tree">
+                  <!-- Heap nodes will be generated here -->
+                </div>
+                <div class="merged-array" id="merged-array">
+                  <!-- Merged elements will appear here -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Algorithm Steps Tab -->
+          <div class="tab-content" id="algorithm-tab">
+            <div class="accordion" id="algorithm-accordion">
+              <div class="accordion-item">
+                <div class="accordion-header" data-accordion="initialize">
+                  <span>1. Check Array Size</span>
+                  <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                  <p>If the array size is less than or equal to ALPAY_SMALL_THRESH (12), use the bidirectional triple fix method for efficient sorting of small arrays.</p>
+                  <p>For larger arrays, proceed with the fractal partitioning approach.</p>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <div class="accordion-header" data-accordion="selectPivots">
+                  <span>2. Select Pivots</span>
+                  <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                  <p>Calculate sqrt(n) as the number of pivots needed, where n is the array size.</p>
+                  <p>Sample approximately 2 × sqrt(n) elements randomly from the array.</p>
+                  <p>Sort the samples and remove outliers (about 15% from each end).</p>
+                  <p>Select evenly spaced elements from the remaining samples as pivots.</p>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <div class="accordion-header" data-accordion="partition">
+                  <span>3. Partition Array</span>
+                  <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                  <p>Create k+1 buckets (where k is the number of pivots).</p>
+                  <p>For each element in the array:</p>
+                  <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li>Find the smallest pivot that is greater than the element</li>
+                    <li>Place the element in the corresponding bucket</li>
+                    <li>If no pivot is greater, place in the last bucket</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <div class="accordion-header" data-accordion="recursiveSort">
+                  <span>4. Recursive Sort</span>
+                  <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                  <p>For each bucket with more than one element:</p>
+                  <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li>If bucket size ≤ 12, use bidirectional triple fix</li>
+                    <li>Otherwise, recursively apply the entire fractal sort algorithm</li>
+                  </ul>
+                  <p>This recursive approach creates a fractal-like pattern of partitioning, reducing the problem size rapidly.</p>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <div class="accordion-header" data-accordion="merge">
+                  <span>5. K-Way Merge</span>
+                  <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                  <p>Create a min-heap with the first element from each bucket.</p>
+                  <p>Repeatedly:</p>
+                  <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li>Extract the minimum element from the heap</li>
+                    <li>Add it to the result array</li>
+                    <li>Insert the next element from the same bucket into the heap</li>
+                    <li>Continue until all elements are processed</li>
+                  </ul>
+                  <p>This approach ensures an efficient O(n log k) merge complexity.</p>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <div class="accordion-header" data-accordion="complete">
+                  <span>6. Sorting Complete</span>
+                  <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                  <p>The array is now fully sorted! The algorithm has used fractal partitioning to efficiently divide the problem into manageable chunks and then merged them back together.</p>
+                  <p>The theoretical time complexity approaches O(n log log n) for well-distributed data, making this algorithm potentially faster than traditional O(n log n) sorting algorithms in many cases.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Code View Tab -->
+          <div class="tab-content" id="code-tab">
+            <div class="code-section">
+<pre class="code-block"><span class="code-comment">// Updated C++ code for Alpay's Advanced Fractal Sort</span>
+<span class="code-comment">// with bidirectional triple fix, fractal partitioning, and min-heap k-way merge</span>
+
+<span class="code-keyword">#include</span> <span class="code-string">&lt;iostream&gt;</span>
+<span class="code-keyword">#include</span> <span class="code-string">&lt;vector&gt;</span>
+<span class="code-keyword">#include</span> <span class="code-string">&lt;cstdlib&gt;</span>   <span class="code-comment">// rand, srand</span>
+<span class="code-keyword">#include</span> <span class="code-string">&lt;ctime&gt;</span>     <span class="code-comment">// time</span>
+<span class="code-keyword">#include</span> <span class="code-string">&lt;utility&gt;</span>   <span class="code-comment">// std::swap</span>
+<span class="code-keyword">#include</span> <span class="code-string">&lt;cmath&gt;</span>     <span class="code-comment">// std::sqrt</span>
+<span class="code-keyword">#include</span> <span class="code-string">&lt;queue&gt;</span>     <span class="code-comment">// std::priority_queue</span>
+
+<span class="code-comment">// Threshold for fallback (small array size)</span>
+<span class="code-keyword">static const int</span> <span class="code-function">ALPAY_SMALL_THRESH</span> = 12;
+<span class="code-comment">// Sample factor for pivot selection</span>
+<span class="code-keyword">static const double</span> <span class="code-function">PIVOT_SAMPLE_FACTOR</span> = 2.0;
+<span class="code-comment">// Fraction of sample outliers to discard</span>
+<span class="code-keyword">static const double</span> <span class="code-function">PIVOT_OUTLIER_FRAC</span> = 0.15;
+
+/*****************************************************************************
+ * 1) Bidirectional Triple Pass
+ *****************************************************************************/
+<span class="code-keyword">void</span> <span class="code-function">alpayTripleFixBidirectional</span>(<span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt; &amp;arr, <span class="code-type">int</span> start, <span class="code-type">int</span> end) {
+    <span class="code-keyword">if</span> (start &gt;= end) <span class="code-keyword">return</span>;  <span class="code-comment">// Array of size 0 or 1 is sorted</span>
+    <span class="code-keyword">if</span> (end - start == 1) {  <span class="code-comment">// Array of size 2</span>
+        <span class="code-keyword">if</span> (arr[start] &gt; arr[start + 1]) {
+            <span class="code-function">std::swap</span>(arr[start], arr[start + 1]);
+        }
+        <span class="code-keyword">return</span>;
+    }
+    <span class="code-type">bool</span> changed = <span class="code-keyword">true</span>;
+    <span class="code-keyword">while</span> (changed) {
+        changed = <span class="code-keyword">false</span>;
+        <span class="code-comment">// Forward pass</span>
+        <span class="code-keyword">for</span> (<span class="code-type">int</span> i = start; i &lt; end; i++) {
+            <span class="code-keyword">if</span> (arr[i] &gt; arr[i + 1]) { <span class="code-function">std::swap</span>(arr[i], arr[i + 1]); changed = <span class="code-keyword">true</span>; }
+        }
+        <span class="code-comment">// Backward pass</span>
+        <span class="code-keyword">for</span> (<span class="code-type">int</span> i = end - 1; i &gt;= start; i--) {
+            <span class="code-keyword">if</span> (arr[i] &lt; arr[i - 1]) { <span class="code-function">std::swap</span>(arr[i], arr[i - 1]); changed = <span class="code-keyword">true</span>; }
+        }
+    }
+}
+
+/*****************************************************************************
+ * 2) Pivot Array Sort (using triple pass)
+ *****************************************************************************/
+<span class="code-keyword">void</span> <span class="code-function">alpayTripleSortPivotArray</span>(<span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt; &amp;pivots) {
+    <span class="code-function">alpayTripleFixBidirectional</span>(pivots, 0, (<span class="code-type">int</span>)pivots.size() - 1);
+}
+
+/*****************************************************************************
+ * 3) Min-Heap-based K-Way Merge
+ *****************************************************************************/
+<span class="code-comment">// Structure for min-heap items</span>
+<span class="code-keyword">struct</span> <span class="code-function">HeapItem</span> {
+    <span class="code-type">int</span> value;
+    <span class="code-type">int</span> bIndex; <span class="code-comment">// Bucket index</span>
+    <span class="code-type">int</span> iIndex; <span class="code-comment">// Index within bucket</span>
+    <span class="code-keyword">bool</span> <span class="code-function">operator&gt;</span>(<span class="code-keyword">const</span> <span class="code-function">HeapItem</span>&amp;o) <span class="code-keyword">const</span> {
+        <span class="code-keyword">return</span> value &gt; o.value;
+    }
+};
+
+<span class="code-keyword">void</span> <span class="code-function">alpayMultiBucketMerge</span>(<span class="code-keyword">const</span> <span class="code-type">std::vector</span>&lt;<span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt;&gt; &amp;buckets,
+                           <span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt; &amp;dest) {
+    <span class="code-type">int</span> total = 0;
+    <span class="code-keyword">for</span> (<span class="code-keyword">auto</span>&amp; b : buckets) total += (<span class="code-type">int</span>)b.size();
+
+    <span class="code-type">std::priority_queue</span>&lt;<span class="code-function">HeapItem</span>, <span class="code-type">std::vector</span>&lt;<span class="code-function">HeapItem</span>&gt;, <span class="code-function">std::greater</span>&lt;<span class="code-function">HeapItem</span>&gt;&gt; minHeap;
+
+    <span class="code-comment">// Initialize heap with the first element of each bucket</span>
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> b = 0; b &lt; (<span class="code-type">int</span>)buckets.size(); b++) {
+        <span class="code-keyword">if</span> (!buckets[b].empty()) {
+            <span class="code-function">HeapItem</span> hi { buckets[b][0], b, 0 };
+            minHeap.push(hi);
+        }
+    }
+
+    dest.clear();
+    dest.reserve(total);
+
+    <span class="code-keyword">while</span> (!minHeap.empty()) {
+        <span class="code-function">HeapItem</span> top = minHeap.top();
+        minHeap.pop();
+        dest.push_back(top.value);
+
+        <span class="code-type">int</span> nextIndex = top.iIndex + 1;
+        <span class="code-keyword">if</span> (nextIndex &lt; (<span class="code-type">int</span>)buckets[top.bIndex].size()) {
+            <span class="code-function">HeapItem</span> hi { buckets[top.bIndex][nextIndex], top.bIndex, nextIndex };
+            minHeap.push(hi);
+        }
+    }
+}
+
+/*****************************************************************************
+ * 4) Alpay’s Advanced Fractal Sort
+ *****************************************************************************/
+<span class="code-keyword">void</span> <span class="code-function">alpayFractalSortAdvanced</span>(<span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt; &amp;arr, <span class="code-type">int</span> start, <span class="code-type">int</span> end) {
+    <span class="code-type">int</span> size = end - start + 1;
+    <span class="code-keyword">if</span> (size &lt;= <span class="code-function">ALPAY_SMALL_THRESH</span>) {
+        <span class="code-function">alpayTripleFixBidirectional</span>(arr, start, end);
+        <span class="code-keyword">return</span>;
+    }
+
+    <span class="code-type">int</span> pivotCount = <span class="code-function">std::max</span>(2, (<span class="code-type">int</span>)<span class="code-function">std::sqrt</span>((<span class="code-type">double</span>)size));
+    <span class="code-type">int</span> pivotSampleCount = <span class="code-function">std::max</span>(pivotCount, (<span class="code-type">int</span>)(pivotCount * <span class="code-function">PIVOT_SAMPLE_FACTOR</span>));
+
+    <span class="code-comment">// Gather random samples</span>
+    <span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt; samples;
+    samples.reserve(pivotSampleCount);
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; pivotSampleCount; i++) {
+        <span class="code-type">int</span> rIndex = start + <span class="code-function">rand</span>() % size;
+        samples.push_back(arr[rIndex]);
+    }
+    <span class="code-comment">// Sort samples using triple pass</span>
+    <span class="code-function">alpayTripleFixBidirectional</span>(samples, 0, (<span class="code-type">int</span>)samples.size() - 1);
+
+    <span class="code-comment">// Discard outlier samples from both ends</span>
+    <span class="code-type">int</span> cut = (<span class="code-type">int</span>)(<span class="code-function">PIVOT_OUTLIER_FRAC</span> * samples.size());
+    <span class="code-keyword">if</span> (cut * 2 &lt; (<span class="code-type">int</span>)samples.size() - pivotCount) {
+        samples.erase(samples.begin(), samples.begin() + cut);
+        samples.erase(samples.end() - cut, samples.end());
+    }
+
+    <span class="code-comment">// Select pivots from the remaining samples</span>
+    <span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt; pivots;
+    pivots.reserve(pivotCount);
+    <span class="code-type">int</span> step = <span class="code-function">std::max</span>(1, (<span class="code-type">int</span>)samples.size() / pivotCount);
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; pivotCount; i++) {
+        pivots.push_back(samples[i * step]);
+    }
+    <span class="code-comment">// Ensure pivots are sorted</span>
+    <span class="code-function">alpayTripleSortPivotArray</span>(pivots);
+
+    <span class="code-comment">// Distribute elements into buckets</span>
+    <span class="code-type">std::vector</span>&lt;<span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt;&gt; buckets(pivotCount + 1);
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = start; i &lt;= end; i++) {
+        <span class="code-type">int</span> x = arr[i];
+        <span class="code-type">int</span> b = 0;
+        <span class="code-keyword">while</span> (b &lt; pivotCount &amp;&amp; x &gt;= pivots[b]) {
+            b++;
+        }
+        buckets[b].push_back(x);
+    }
+
+    <span class="code-comment">// Recursively sort each bucket</span>
+    <span class="code-keyword">for</span> (<span class="code-keyword">auto</span>&amp; bucket : buckets) {
+        <span class="code-keyword">if</span> ((<span class="code-type">int</span>)bucket.size() &gt; 1) {
+            <span class="code-function">alpayFractalSortAdvanced</span>(bucket, 0, (<span class="code-type">int</span>)bucket.size() - 1);
+        }
+    }
+
+    <span class="code-comment">// Merge buckets using k-way merge</span>
+    <span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt; mergedAll;
+    <span class="code-function">alpayMultiBucketMerge</span>(buckets, mergedAll);
+
+    <span class="code-comment">// Copy merged result back to original array</span>
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; (<span class="code-type">int</span>)mergedAll.size(); i++) {
+        arr[start + i] = mergedAll[i];
+    }
+}
+
+<span class="code-comment">// Example main() usage</span>
+<span class="code-keyword">int</span> <span class="code-function">main</span>() {
+    <span class="code-function">std::srand</span>((<span class="code-type">unsigned</span>)<span class="code-function">std::time</span>(nullptr));
+
+    <span class="code-type">std::vector</span>&lt;<span class="code-type">int</span>&gt; data = {
+        18, 2, 12, 5, 29, 17, 4, 0,
+        19, 23, 1, 9, 7, 6,
+        59, 559, 342, 678, 231, 560,
+        248, 2485, 2495, 2495, 586, 35,
+        788,
+        8, 976, 0, 668, 866, 765, 57, 43, 75, 8, 754, 74,
+        75, 965, 86, 75578, 98
+    };
+
+    <span class="code-function">std::cout</span> &lt;&lt; <span class="code-string">"Original:\n"</span>;
+    <span class="code-keyword">for</span> (auto &amp;x : data) <span class="code-function">std::cout</span> &lt;&lt; x &lt;&lt; <span class="code-string">" "</span>;
+    <span class="code-function">std::cout</span> &lt;&lt; <span class="code-string">"\n"</span>;
+
+    <span class="code-function">alpayFractalSortAdvanced</span>(data, 0, (<span class="code-type">int</span>)data.size() - 1);
+
+    <span class="code-function">std::cout</span> &lt;&lt; <span class="code-string">"\nSorted:\n"</span>;
+    <span class="code-keyword">for</span> (auto &amp;x : data) <span class="code-function">std::cout</span> &lt;&lt; x &lt;&lt; <span class="code-string">" "</span>;
+    <span class="code-function">std::cout</span> &lt;&lt; <span class="code-string">"\n"</span>;
+
+    <span class="code-keyword">return</span> 0;
+}
+</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- LEARN TAB CONTENT -->
+      <div class="tab-content" id="learn-tab">
+        <div class="game-board">
+          <h2>Understanding Alpay's Advanced Fractal Sort</h2>
+          
+          <div class="step-explanation">
+            <h3 class="step-title">
+              <span class="step-title-icon">i</span>
+              Algorithm Overview
+            </h3>
+            <p>Alpay's Advanced Fractal Sort is a unique sorting algorithm that combines multiple innovative techniques:</p>
+            <ul style="margin-top: 10px; list-style-type: disc; padding-left: 20px;">
+              <li>Uses <strong>fractal partitioning</strong> with <span class="math-equation">√n</span> pivots</li>
+              <li>Employs <strong>adaptive pivot selection</strong> with outlier removal</li>
+              <li>Leverages a <strong>min-heap k-way merge</strong> for efficient combining</li>
+              <li>Falls back to <strong>bidirectional triple fix</strong> for small arrays</li>
+            </ul>
+          </div>
+          
+          <div style="margin: 2rem 0;">
+            <h3>Mathematical Performance</h3>
+            <p>The algorithm achieves impressive theoretical performance:</p>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-secondary); border-radius: var(--border-radius);">
+              <thead>
+                <tr>
+                  <th style="padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--bg-tertiary);">Case</th>
+                  <th style="padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--bg-tertiary);">Time Complexity</th>
+                  <th style="padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--bg-tertiary);">Space Complexity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 0.8rem; border-bottom: 1px solid var(--bg-tertiary);">Best/Average</td>
+                  <td style="padding: 0.8rem; border-bottom: 1px solid var(--bg-tertiary);"><span class="math-equation">O(n log log n)</span></td>
+                  <td style="padding: 0.8rem; border-bottom: 1px solid var(--bg-tertiary);"><span class="math-equation">O(n)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.8rem;">Worst</td>
+                  <td style="padding: 0.8rem;"><span class="math-equation">O(n²)</span></td>
+                  <td style="padding: 0.8rem;"><span class="math-equation">O(n)</span></td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <p>The <span class="math-equation">O(n log log n)</span> average case is achieved by:</p>
+            <ol style="margin-top: 10px; padding-left: 20px;">
+              <li>Reducing recursion depth to approximately <span class="math-equation">log log n</span> by creating <span class="math-equation">√n</span> buckets at each level</li>
+              <li>Using efficient bucketing to partition elements</li>
+              <li>Employing a min-heap for merging in <span class="math-equation">O(n log k)</span> time (where k ≈ <span class="math-equation">√n</span>)</li>
+            </ol>
+          </div>
+          
+          <div style="margin: 2rem 0;">
+            <h3>Key Innovations</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+              <div class="feature-card">
+                <h4>
+                  <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                    </svg>
+                  </div>
+                  Fractal Partitioning
+                </h4>
+                <p>Uses <span class="math-equation">√n</span> pivots to create multiple buckets, reducing recursion depth significantly.</p>
+                <div class="enhanced-tooltip">
+                  Learn more
+                  <div class="tooltip-content">
+                    By partitioning data using <span class="math-equation">√n</span> pivots, the recursion depth is reduced from roughly <span class="math-equation">log n</span> to <span class="math-equation">log log n</span>.
+                  </div>
+                </div>
+              </div>
+              <div class="feature-card">
+                <h4>
+                  <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
+                    </svg>
+                  </div>
+                  Adaptive Pivot Selection
+                </h4>
+                <p>Samples more elements than needed, sorts them, and removes outliers for balanced pivot selection.</p>
+                <div class="enhanced-tooltip">
+                  Learn more
+                  <div class="tooltip-content">
+                    Approximately <span class="math-equation">2 × √n</span> elements are sampled; outliers (around 15% from each end) are discarded to improve pivot quality.
+                  </div>
+                </div>
+              </div>
+              <div class="feature-card">
+                <h4>
+                  <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.25-14.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 1.5 0zm0 10.5v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 1.5 0zM2.25 8a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5H3a.75.75 0 0 1-.75-.75zm9 0a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75zm.5-3a.5.5 0 1 0 0-1h4a.5.5 0 0 0 0 1h-4zm0 6a.5.5 0 1 0 0-1h4a.5.5 0 0 0 0 1h-4z"/>
+                    </svg>
+                  </div>
+                  K-Way Merge
+                </h4>
+                <p>Uses a min-heap to merge multiple sorted buckets in O(n log k) time (with k ≈ <span class="math-equation">√n</span>).</p>
+                <div class="enhanced-tooltip">
+                  Learn more
+                  <div class="tooltip-content">
+                    All buckets are merged simultaneously via a min-heap, greatly reducing merge time compared to pairwise merging.
+                  </div>
+                </div>
+              </div>
+              <div class="feature-card">
+                <h4>
+                  <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
+                    </svg>
+                  </div>
+                  Triple Fix
+                </h4>
+                <p>For small arrays, the bidirectional triple-comparison approach efficiently corrects nearly-sorted data.</p>
+                <div class="enhanced-tooltip">
+                  Learn more
+                  <div class="tooltip-content">
+                    This method repeatedly checks and swaps adjacent triplets in forward and backward passes until no further swaps are needed.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- CHALLENGES TAB CONTENT -->
+          <div class="tab-content" id="challenges-tab">
+            <div class="challenge-section">
+              <h2>Sorting Challenges</h2>
+              <div class="challenge-card">
+                <h3>
+                  <span class="challenge-badge">1</span>
+                  Predict the Pivots
+                </h3>
+                <p>Can you select the optimal pivots for this array? Choose <span class="math-equation">√n</span> elements that would create the most balanced partitions.</p>
+                <div class="mini-game">
+                  <div class="mini-game-elements" id="pivot-game">
+                    <!-- Game elements will be generated here -->
+                  </div>
+                  <button class="btn btn-primary" id="check-pivots">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                    </svg>
+                    Check Your Pivots
+                  </button>
+                </div>
+              </div>
+              
+              <div class="challenge-card">
+                <h3>
+                  <span class="challenge-badge">2</span>
+                  Optimize for Edge Cases
+                </h3>
+                <p>Different types of arrays can challenge sorting algorithms. Try to optimize the sort for these scenarios:</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                  <button class="btn btn-secondary" id="nearly-sorted">Nearly Sorted Array</button>
+                  <button class="btn btn-secondary" id="reversed">Reversed Array</button>
+                  <button class="btn btn-secondary" id="few-unique">Few Unique Values</button>
+                  <button class="btn btn-secondary" id="random-data">Random Data</button>
+                </div>
+                <div id="edge-case-stats" style="margin-top: 1rem; display: none;">
+                  <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--border-radius);">
+                    <h4 id="case-title" style="margin-bottom: 0.5rem;">Case Results</h4>
+                    <div id="case-results" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                      <div>
+                        <span style="font-weight: 600;">Comparisons:</span>
+                        <span id="case-comparisons">0</span>
+                      </div>
+                      <div>
+                        <span style="font-weight: 600;">Time:</span>
+                        <span id="case-time">0ms</span>
+                      </div>
+                      <div>
+                        <span style="font-weight: 600;">Recursion Depth:</span>
+                        <span id="case-depth">0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="challenge-card">
+                <h3>
+                  <span class="challenge-badge">3</span>
+                  Algorithmic Improvements Challenge
+                </h3>
+                <p>Can you suggest improvements to the algorithm? Modify these parameters and observe the performance effects:</p>
+                <div style="margin: 1.5rem 0;">
+                  <div style="display: flex; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <label for="small-thresh" style="min-width: 200px;">Small Array Threshold:</label>
+                    <input type="range" id="small-thresh" min="4" max="24" value="12" style="flex: 1;">
+                    <span id="small-thresh-value" style="min-width: 40px; text-align: right;">12</span>
+                  </div>
+                  <div style="display: flex; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <label for="pivot-factor" style="min-width: 200px;">Pivot Sample Factor:</label>
+                    <input type="range" id="pivot-factor" min="1" max="4" step="0.1" value="2" style="flex: 1;">
+                    <span id="pivot-factor-value" style="min-width: 40px; text-align: right;">2.0</span>
+                  </div>
+                  <div style="display: flex; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <label for="outlier-frac" style="min-width: 200px;">Outlier Fraction:</label>
+                    <input type="range" id="outlier-frac" min="0" max="0.3" step="0.01" value="0.15" style="flex: 1;">
+                    <span id="outlier-frac-value" style="min-width: 40px; text-align: right;">0.15</span>
+                  </div>
+                  <button class="btn btn-action" id="test-params">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M9.502 5.513a.144.144 0 0 0-.202.134V6.65a.5.5 0 0 1-.5.5H2.5v2.9h6.3a.5.5 0 0 1 .5.5v1.003c0 .108.11.176.202.134l3.984-2.933a.51.51 0 0 1 .042-.028.147.147 0 0 0 0-.252.51.51 0 0 1-.042-.028L9.502 5.513zM8.3 5.647a1.144 1.144 0 0 1 1.767-.96l3.994 2.94a1.147 1.147 0 0 1 0 1.946l-3.994 2.94a1.144 1.144 0 0 1-1.767-.96v-.503H2a.5.5 0 0 1-.5-.5v-3.9a.5.5 0 0 1 .5-.5h6.3v-.503z"/>
+                    </svg>
+                    Test Parameters
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- ACHIEVEMENTS TAB CONTENT -->
+          <div class="tab-content" id="achievements-tab">
+            <div class="achievements-section">
+              <h2>Achievements</h2>
+              <p>Complete challenges to unlock achievements and level up your understanding of Alpay's Advanced Fractal Sort!</p>
+              <div class="achievements-grid">
+                <div class="achievement-card" id="achievement-beginner">
+                  <div class="achievement-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935z"/>
+                    </svg>
+                  </div>
+                  <h3 class="achievement-title">Beginner Sorter</h3>
+                  <p class="achievement-description">Complete your first sort.</p>
+                </div>
+                <div class="achievement-card locked" id="achievement-pivot">
+                  <div class="achievement-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M4.646 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                    </svg>
+                  </div>
+                  <h3 class="achievement-title">Pivot Master</h3>
+                  <p class="achievement-description">Select the optimal pivots in the challenge.</p>
+                </div>
+                <div class="achievement-card locked" id="achievement-efficient">
+                  <div class="achievement-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                    </svg>
+                  </div>
+                  <h3 class="achievement-title">Efficiency Expert</h3>
+                  <p class="achievement-description">Sort a large array with minimal comparisons.</p>
+                </div>
+                <div class="achievement-card locked" id="achievement-researcher">
+                  <div class="achievement-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+                    </svg>
+                  </div>
+                  <h3 class="achievement-title">Algorithm Researcher</h3>
+                  <p class="achievement-description">Test all parameter configurations in the improvement challenge.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- NOTIFICATION CONTAINER -->
+  <div class="notification-container" id="notification-container">
+    <!-- Notifications will be dynamically created here -->
+  </div>
+  
+  <footer>
+    <a href="#" class="back-to-top" aria-label="Back to top">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+      </svg>
+    </a>
+    <div class="footer-links">
+      <a href="#" class="footer-link">About</a>
+      <a href="#" class="footer-link">Terms</a>
+      <a href="#" class="footer-link">Privacy</a>
+      <a href="#" class="footer-link">Contact</a>
+    </div>
+    <p>&copy; 2025 Alpay's Advanced Fractal Sort Interactive Visualization</p>
+  </footer>
+  
+  <script>
+    // DOM Elements
+    const arrayContainer = document.getElementById('array-container');
+    const bucketsContainer = document.getElementById('buckets-container');
+    const heapVisualization = document.getElementById('heap-visualization');
+    const heapTree = document.getElementById('heap-tree');
+    const mergedArray = document.getElementById('merged-array');
+    const generateArrayBtn = document.getElementById('generate-array');
+    const startSortBtn = document.getElementById('start-sort');
+    const stepButton = document.getElementById('step-button');
+    const helpButton = document.getElementById('help-button');
+    const closeModalBtn = document.getElementById('close-modal');
+    const helpModal = document.getElementById('help-modal');
+    const comparisonCountEl = document.getElementById('comparison-count');
+    const sortScoreEl = document.getElementById('sort-score');
+    const timeTakenEl = document.getElementById('time-taken');
+    const sortProgressEl = document.getElementById('sort-progress');
+    const currentLevelEl = document.getElementById('current-level');
+    const stepExplanation = document.querySelector('.step-explanation');
+    const speedSlider = document.getElementById('speed-slider');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    
+    // Main navigation & game board tabs
+    const navTabs = document.querySelectorAll('.nav-tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const gameTabs = document.querySelectorAll('.game-tab');
+    const gameTabContents = document.querySelectorAll('#visualization-tab, #algorithm-tab, #code-tab');
+    
+    // Accordion headers
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    
+    // Challenge elements
+    const pivotGameContainer = document.getElementById('pivot-game');
+    const checkPivotsBtn = document.getElementById('check-pivots');
+    const edgeCaseButtons = document.querySelectorAll('#nearly-sorted, #reversed, #few-unique, #random-data');
+    const edgeCaseStats = document.getElementById('edge-case-stats');
+    const caseTitleEl = document.getElementById('case-title');
+    const caseComparisonsEl = document.getElementById('case-comparisons');
+    const caseTimeEl = document.getElementById('case-time');
+    const caseDepthEl = document.getElementById('case-depth');
+    
+    // Parameter sliders
+    const smallThreshSlider = document.getElementById('small-thresh');
+    const smallThreshValue = document.getElementById('small-thresh-value');
+    const pivotFactorSlider = document.getElementById('pivot-factor');
+    const pivotFactorValue = document.getElementById('pivot-factor-value');
+    const outlierFracSlider = document.getElementById('outlier-frac');
+    const outlierFracValue = document.getElementById('outlier-frac-value');
+    const testParamsBtn = document.getElementById('test-params');
+    
+    // Game state
+    let gameState = {
+      array: [],
+      pivots: [],
+      buckets: [],
+      comparisonCount: 0,
+      score: 0,
+      level: 1,
+      startTime: null,
+      timerInterval: null,
+      currentStep: 0,
+      steps: ['initialize', 'selectPivots', 'partition', 'recursiveSort', 'merge', 'complete'],
+      isRunning: false,
+      isCompleted: false,
+      speed: 5, // 1 (slow) to 10 (fast)
+      achievements: { beginner: false, pivot: false, efficient: false, researcher: false },
+      params: { SMALL_THRESH: 12, PIVOT_SAMPLE_FACTOR: 2.0, PIVOT_OUTLIER_FRAC: 0.15 },
+      maxRecursionDepth: 0
+    };
+    
+    // ---------- EVENT LISTENERS ----------
+    window.addEventListener('DOMContentLoaded', initializeApp);
+    generateArrayBtn.addEventListener('click', generateArray);
+    startSortBtn.addEventListener('click', startSort);
+    stepButton.addEventListener('click', handleStepButton);
+    helpButton.addEventListener('click', () => { helpModal.classList.add('show'); });
+    closeModalBtn.addEventListener('click', () => { helpModal.classList.remove('show'); });
+    themeToggleBtn.addEventListener('click', toggleTheme);
+    speedSlider.addEventListener('input', updateSpeed);
+    
+    navTabs.forEach(tab => { tab.addEventListener('click', () => switchMainTab(tab.dataset.tab)); });
+    gameTabs.forEach(tab => { tab.addEventListener('click', () => switchGameTab(tab.dataset.gameTab)); });
+    accordionHeaders.forEach(header => { header.addEventListener('click', toggleAccordion); });
+    checkPivotsBtn.addEventListener('click', checkPivots);
+    edgeCaseButtons.forEach(button => { button.addEventListener('click', () => generateEdgeCaseArray(button.id)); });
+    
+    // ---------- MAIN INIT FUNCTION ----------
+    function initializeApp() {
+      setupPivotGame();
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) { document.body.setAttribute('data-theme', savedTheme); updateThemeIcon(savedTheme); }
+      initTabContent();
+      generateArray();
+      checkSavedAchievements();
+    }
+    
+    function initTabContent() {
+      const firstAccordion = document.querySelector('#algorithm-accordion .accordion-header');
+      if (firstAccordion) { firstAccordion.classList.add('active'); firstAccordion.nextElementSibling.classList.add('active'); }
+      switchGameTab('visualization');
+    }
+    
+    // ---------- GENERATE / RESET ----------
+    function generateArray() {
+      resetGame();
+      const size = 8 + (gameState.level * 3);
+      gameState.array = [];
+      for (let i = 0; i < size; i++) {
+        const value = Math.floor(Math.random() * 100) + 1;
+        gameState.array.push(value);
+      }
+      renderArray();
+      updateStepExplanation('initialize');
+    }
+    
+    function resetGame() {
+      gameState.array = [];
+      gameState.pivots = [];
+      gameState.buckets = [];
+      gameState.comparisonCount = 0;
+      gameState.score = 0;
+      gameState.startTime = null;
+      gameState.currentStep = 0;
+      gameState.isRunning = false;
+      gameState.isCompleted = false;
+      stopTimer();
+      timeTakenEl.textContent = '0s';
+      arrayContainer.innerHTML = '';
+      arrayContainer.style.opacity = 1;
+      bucketsContainer.style.display = 'none';
+      bucketsContainer.innerHTML = '';
+      heapVisualization.style.display = 'none';
+      heapTree.innerHTML = '';
+      mergedArray.innerHTML = '';
+      sortProgressEl.style.width = '0%';
+      startSortBtn.disabled = false;
+      stepButton.disabled = false;
+      updateStats();
+    }
+    
+    // ---------- RENDER ARRAY ----------
+    function renderArray(sorted = false) {
+      arrayContainer.innerHTML = '';
+      if (gameState.array.length === 0) return;
+      const maxValue = Math.max(...gameState.array);
+      gameState.array.forEach((value, index) => {
+        const height = (value / maxValue) * 180;
+        const element = document.createElement('div');
+        element.className = 'array-element' + (sorted ? ' sorted' : '');
+        element.style.height = `${height}px`;
+        element.dataset.index = index;
+        element.dataset.value = value;
+        const valueEl = document.createElement('div');
+        valueEl.className = 'element-value';
+        valueEl.textContent = value;
+        element.appendChild(valueEl);
+        arrayContainer.appendChild(element);
+      });
+    }
+    
+    // ---------- SORT CONTROL ----------
+    function startSort() {
+      if (gameState.array.length === 0) { showNotification('Please generate an array first!', 'warning'); return; }
+      if (gameState.isRunning || gameState.isCompleted) return;
+      gameState.isRunning = true;
+      gameState.startTime = Date.now();
+      startTimer();
+      gameState.currentStep = 0;
+      switchGameTab('visualization');
+      runSortingStep();
+    }
+    
+    function handleStepButton() {
+      if (gameState.array.length === 0) { showNotification('Please generate an array first!', 'warning'); return; }
+      if (gameState.isCompleted) { showNotification('Sorting complete. Please generate a new array.', 'info'); return; }
+      if (!gameState.isRunning) { gameState.isRunning = true; gameState.startTime = gameState.startTime || Date.now(); startTimer(); }
+      switchGameTab('visualization');
+      runSortingStep();
+    }
+    
+    function runSortingStep() {
+      if (gameState.isCompleted) return;
+      if (gameState.currentStep >= gameState.steps.length) { completeSort(); return; }
+      const step = gameState.steps[gameState.currentStep];
+      sortProgressEl.style.width = `${((gameState.currentStep + 1) / gameState.steps.length) * 100}%`;
+      switch(step) {
+        case 'initialize':
+          updateStepExplanation('initialize');
+          break;
+        case 'selectPivots':
+          selectPivots();
+          updateStepExplanation('selectPivots');
+          break;
+        case 'partition':
+          partitionArray();
+          updateStepExplanation('partition');
+          break;
+        case 'recursiveSort':
+          recursiveSort();
+          updateStepExplanation('recursiveSort');
+          break;
+        case 'merge':
+          mergeSort();
+          updateStepExplanation('merge');
+          break;
+        case 'complete':
+          showSortedArray();
+          updateStepExplanation('complete');
+          break;
+      }
+      gameState.currentStep++;
+      if (gameState.isRunning && !stepButton.classList.contains('active') && !gameState.isCompleted) {
+        setTimeout(runSortingStep, getAnimationDelay());
+      }
+    }
+    
+    function getAnimationDelay() {
+      return 1100 - (gameState.speed * 100);
+    }
+    
+    function completeSort() {
+      gameState.isRunning = false;
+      gameState.isCompleted = true;
+      stopTimer();
+      if (gameState.array.length > 0) {
+        gameState.level++;
+        currentLevelEl.textContent = gameState.level;
+        showNotification(`Level ${gameState.level} unlocked!`, 'success');
+      }
+      startSortBtn.disabled = true;
+      stepButton.disabled = true;
+    }
+    
+    // ---------- SORTING STEPS (New Algorithm Implementation) ----------
+    // For small arrays, use bidirectional triple fix (bubble sort variant)
+    function selectPivots() {
+      const elements = document.querySelectorAll('.array-element');
+      elements.forEach(el => el.classList.remove('pivot'));
+      const pivotCount = Math.max(2, Math.floor(Math.sqrt(gameState.array.length)));
+      gameState.pivots = [];
+      const step = Math.floor(gameState.array.length / (pivotCount + 1));
+      for (let i = 1; i <= pivotCount; i++) {
+        const index = i * step;
+        if (index < gameState.array.length) {
+          gameState.pivots.push({ index, value: gameState.array[index] });
+          setTimeout(() => {
+            const element = document.querySelector(`.array-element[data-index="${index}"]`);
+            if (element) { element.classList.add('pivot'); }
+          }, i * 200);
+        }
+      }
+      gameState.comparisonCount += pivotCount;
+      gameState.score += pivotCount * 5;
+      updateStats();
+    }
+    
+    function partitionArray() {
+      gameState.pivots.sort((a, b) => a.value - b.value);
+      const bucketCount = gameState.pivots.length + 1;
+      gameState.buckets = Array.from({ length: bucketCount }, () => []);
+      arrayContainer.style.opacity = 0;
+      setTimeout(() => {
+        gameState.array.forEach(value => {
+          let bucketIndex = 0;
+          while (bucketIndex < gameState.pivots.length && value >= gameState.pivots[bucketIndex].value) {
+            bucketIndex++;
+            gameState.comparisonCount++;
+          }
+          gameState.buckets[bucketIndex].push(value);
+        });
+        bucketsContainer.style.display = 'flex';
+        bucketsContainer.innerHTML = '';
+        gameState.buckets.forEach((bucket, i) => {
+          const bucketEl = document.createElement('div');
+          bucketEl.className = 'bucket';
+          bucketEl.style.opacity = 0;
+          let label = (i === 0) ? `< ${gameState.pivots[0]?.value || 'MAX'}` :
+                      (i === gameState.buckets.length - 1) ? `≥ ${gameState.pivots[i - 1]?.value || 'MIN'}` :
+                      `${gameState.pivots[i - 1]?.value || 'MIN'} - ${gameState.pivots[i]?.value || 'MAX'}`;
+          const labelEl = document.createElement('div');
+          labelEl.className = 'bucket-label';
+          labelEl.textContent = label;
+          const elementsEl = document.createElement('div');
+          elementsEl.className = 'bucket-elements';
+          bucket.forEach(val => {
+            const el = document.createElement('div');
+            el.className = 'bucket-element';
+            el.textContent = val;
+            elementsEl.appendChild(el);
+          });
+          bucketEl.appendChild(labelEl);
+          bucketEl.appendChild(elementsEl);
+          bucketsContainer.appendChild(bucketEl);
+          setTimeout(() => { bucketEl.style.opacity = 1; }, i * 100);
+        });
+        gameState.score += gameState.array.length * 2;
+        updateStats();
+      }, 500);
+    }
+    
+    function recursiveSort() {
+      let totalDelay = 0;
+      gameState.buckets.forEach((bucket, i) => {
+        setTimeout(() => {
+          // For visualization, we use built-in sort here; in production you could recursively call the fractal sort
+          bucket.sort((a, b) => a - b);
+          const bucketEl = document.querySelectorAll('.bucket')[i];
+          if (bucketEl) {
+            bucketEl.style.boxShadow = '0 0 15px var(--accent-primary)';
+            const elementsEl = bucketEl.querySelector('.bucket-elements');
+            if (elementsEl) {
+              elementsEl.innerHTML = '';
+              bucket.forEach(val => {
+                const el = document.createElement('div');
+                el.className = 'bucket-element';
+                el.textContent = val;
+                elementsEl.appendChild(el);
+              });
+            }
+            setTimeout(() => { bucketEl.style.boxShadow = ''; }, 500);
+          }
+          if (bucket.length > 1) {
+            gameState.comparisonCount += Math.round(bucket.length * Math.log2(bucket.length));
+            gameState.score += bucket.length * 10;
+            updateStats();
+          }
+        }, totalDelay);
+        totalDelay += 300;
+      });
+    }
+    
+    function mergeSort() {
+      const buckets = document.querySelectorAll('.bucket');
+      buckets.forEach(b => { b.style.opacity = 0; });
+      setTimeout(() => {
+        bucketsContainer.style.display = 'none';
+        heapVisualization.style.display = 'block';
+        visualizeHeapMerge();
+        gameState.comparisonCount += gameState.array.length;
+        gameState.score += gameState.array.length * 5;
+        updateStats();
+      }, 500);
+    }
+    
+    function visualizeHeapMerge() {
+      heapTree.innerHTML = '';
+      mergedArray.innerHTML = '';
+      const heap = [];
+      gameState.buckets.forEach((bucket, bIndex) => {
+        if (bucket.length > 0) { heap.push({ value: bucket[0], bIndex, iIndex: 0 }); }
+      });
+      heap.sort((a, b) => a.value - b.value);
+      heap.forEach((item, i) => {
+        const node = document.createElement('div');
+        node.className = 'heap-node';
+        node.textContent = item.value;
+        const level = Math.floor(Math.log2(i + 1));
+        const pos = i - Math.pow(2, level) + 1;
+        const totalNodes = Math.pow(2, level);
+        const spacing = 100 / (totalNodes + 1);
+        node.style.left = `${(pos + 1) * spacing}%`;
+        node.style.top = `${level * 50 + 20}px`;
+        heapTree.appendChild(node);
+        if (i > 0) {
+          const parentIndex = Math.floor((i - 1) / 2);
+          const edge = document.createElement('div');
+          edge.className = 'heap-edge';
+          setTimeout(() => {
+            const parentNode = heapTree.querySelectorAll('.heap-node')[parentIndex];
+            const childNode = heapTree.querySelectorAll('.heap-node')[i];
+            if (parentNode && childNode) {
+              const pRect = parentNode.getBoundingClientRect();
+              const cRect = childNode.getBoundingClientRect();
+              const hRect = heapTree.getBoundingClientRect();
+              const startX = (pRect.left + pRect.width / 2) - hRect.left;
+              const startY = (pRect.top + pRect.height / 2) - hRect.top;
+              const endX = (cRect.left + cRect.width / 2) - hRect.left;
+              const endY = (cRect.top + cRect.height / 2) - hRect.top;
+              const length = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
+              const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+              edge.style.width = `${length}px`;
+              edge.style.left = `${startX}px`;
+              edge.style.top = `${startY}px`;
+              edge.style.transform = `rotate(${angle}deg)`;
+              heapTree.appendChild(edge);
+            }
+          }, 100);
+        }
+      });
+      let mergedResult = [];
+      let currentIndices = Array(gameState.buckets.length).fill(0);
+      while (heap.length > 0) {
+        const minItem = heap.shift();
+        mergedResult.push(minItem.value);
+        const { bIndex } = minItem;
+        currentIndices[bIndex]++;
+        if (currentIndices[bIndex] < gameState.buckets[bIndex].length) {
+          const nextVal = gameState.buckets[bIndex][currentIndices[bIndex]];
+          let insertIdx = 0;
+          while (insertIdx < heap.length && nextVal > heap[insertIdx].value) { insertIdx++; }
+          heap.splice(insertIdx, 0, { value: nextVal, bIndex, iIndex: currentIndices[bIndex] });
+        }
+      }
+      gameState.array = mergedResult;
+      visualizeMergedArray(mergedResult);
+    }
+    
+    function visualizeMergedArray(arr) {
+      mergedArray.innerHTML = '';
+      arr.forEach((val, i) => {
+        setTimeout(() => {
+          const el = document.createElement('div');
+          el.className = 'merged-element';
+          el.textContent = val;
+          mergedArray.appendChild(el);
+        }, i * 100);
+      });
+    }
+    
+    function showSortedArray() {
+      heapVisualization.style.display = 'none';
+      arrayContainer.style.opacity = 1;
+      renderArray();
+      document.querySelectorAll('.array-element').forEach((el, i) => {
+        setTimeout(() => { el.classList.add('sorted'); }, i * 50);
+      });
+      gameState.score += gameState.array.length * 20;
+      updateStats();
+      if (!gameState.achievements.beginner) { unlockAchievement('beginner'); }
+      if (gameState.array.length > 20 && gameState.comparisonCount < gameState.array.length * Math.log2(gameState.array.length)) { unlockAchievement('efficient'); }
+    }
+    
+    // ---------- UI UPDATES ----------
+    function updateStepExplanation(step) {
+      const title = document.querySelector('.step-title');
+      const content = document.querySelector('.step-explanation p');
+      const icon = document.querySelector('.step-title-icon');
+      stepExplanation.classList.add('highlight');
+      setTimeout(() => { stepExplanation.classList.remove('highlight'); }, 500);
+      switch(step) {
+        case 'initialize':
+          icon.textContent = '1';
+          title.textContent = 'Step 1: Check Array Size';
+          content.textContent = 'For small arrays (≤ 12 elements), use the bidirectional triple fix; for larger arrays, apply fractal partitioning.';
+          break;
+        case 'selectPivots':
+          icon.textContent = '2';
+          title.textContent = 'Step 2: Select Pivots';
+          content.textContent = `Selecting sqrt(n) = ${Math.floor(Math.sqrt(gameState.array.length))} pivots via sampling and outlier removal.`;
+          break;
+        case 'partition':
+          icon.textContent = '3';
+          title.textContent = 'Step 3: Partition Array';
+          content.textContent = 'Elements are distributed into buckets based on pivot comparisons.';
+          break;
+        case 'recursiveSort':
+          icon.textContent = '4';
+          title.textContent = 'Step 4: Recursive Sort';
+          content.textContent = 'Each bucket is recursively sorted. Small buckets use the triple fix method.';
+          break;
+        case 'merge':
+          icon.textContent = '5';
+          title.textContent = 'Step 5: K-Way Merge';
+          content.textContent = 'Buckets are merged using a min-heap for efficient k-way merging.';
+          break;
+        case 'complete':
+          icon.textContent = '✓';
+          title.textContent = 'Sorting Complete!';
+          content.textContent = `Array sorted in ${gameState.comparisonCount} comparisons. Fractal partitioning achieves O(n log log n) average complexity.`;
+          break;
+      }
+      const accHeader = document.querySelector(`.accordion-header[data-accordion="${step}"]`);
+      if (accHeader && !accHeader.classList.contains('active')) {
+        const openAcc = document.querySelector('#algorithm-accordion .accordion-header.active');
+        if (openAcc) { openAcc.classList.remove('active'); openAcc.nextElementSibling.classList.remove('active'); }
+        accHeader.classList.add('active'); accHeader.nextElementSibling.classList.add('active');
+      }
+    }
+    
+    // ---------- TIMER & STATS ----------
+    function startTimer() {
+      stopTimer();
+      gameState.startTime = Date.now();
+      gameState.timerInterval = setInterval(() => {
+        const t = Math.floor((Date.now() - gameState.startTime) / 1000);
+        timeTakenEl.textContent = `${t}s`;
+      }, 1000);
+    }
+    
+    function stopTimer() {
+      if (gameState.timerInterval) { clearInterval(gameState.timerInterval); gameState.timerInterval = null; }
+    }
+    
+    function updateStats() {
+      comparisonCountEl.textContent = gameState.comparisonCount;
+      sortScoreEl.textContent = gameState.score;
+    }
+    
+    function updateSpeed() {
+      gameState.speed = parseInt(speedSlider.value);
+    }
+    
+    // ---------- TAB SWITCHING ----------
+    function switchMainTab(tabId) {
+      navTabs.forEach(tab => { tab.classList.toggle('active', tab.dataset.tab === tabId); });
+      tabContents.forEach(content => { content.classList.toggle('active', content.id === `${tabId}-tab`); });
+    }
+    
+    function switchGameTab(tabId) {
+      gameTabs.forEach(tab => { tab.classList.toggle('active', tab.dataset.gameTab === tabId); });
+      gameTabContents.forEach(content => {
+        const active = content.id === `${tabId}-tab`;
+        content.style.display = active ? 'block' : 'none';
+        active ? content.classList.add('active') : content.classList.remove('active');
+      });
+    }
+    
+    // ---------- ACCORDION TOGGLE ----------
+    function toggleAccordion() {
+      const isActive = this.classList.contains('active');
+      if (this.closest('.accordion')) {
+        const headers = this.closest('.accordion').querySelectorAll('.accordion-header');
+        headers.forEach(header => { header.classList.remove('active'); header.nextElementSibling.classList.remove('active'); });
+      }
+      if (!isActive) { this.classList.add('active'); this.nextElementSibling.classList.add('active'); }
+    }
+    
+    // ---------- THEME TOGGLE ----------
+    function toggleTheme() {
+      const cur = document.body.getAttribute('data-theme') || 'dark';
+      const newTheme = cur === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+    
+    function updateThemeIcon(theme) {
+      if (theme === 'dark') {
+        themeIcon.innerHTML = `
+          <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+        `;
+      } else {
+        themeIcon.innerHTML = `
+          <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+        `;
+      }
+    }
+    
+    // ---------- CHALLENGES ----------
+    function setupPivotGame() {
+      pivotGameContainer.innerHTML = '';
+      const nums = [];
+      for (let i = 0; i < 8; i++) { nums.push(Math.floor(Math.random() * 90) + 10); }
+      nums.sort((a, b) => a - b);
+      nums.forEach(num => {
+        const el = document.createElement('div');
+        el.className = 'mini-game-element';
+        el.textContent = num;
+        el.addEventListener('click', () => { el.classList.toggle('selected'); });
+        pivotGameContainer.appendChild(el);
+      });
+    }
+    
+    function checkPivots() {
+      const selected = document.querySelectorAll('.mini-game-element.selected');
+      if (selected.length === 0) { showNotification('Please select some pivots first!', 'warning'); return; }
+      const values = Array.from(document.querySelectorAll('.mini-game-element')).map(el => parseInt(el.textContent));
+      values.sort((a, b) => a - b);
+      const idealCount = Math.floor(Math.sqrt(values.length));
+      const step = Math.floor(values.length / (idealCount + 1));
+      const idealPivots = [];
+      for (let i = 1; i <= idealCount; i++) { if (i * step < values.length) idealPivots.push(values[i * step]); }
+      let score = 0;
+      const selVals = Array.from(selected).map(el => parseInt(el.textContent));
+      if (selVals.length === idealCount) { score += 10; }
+      selVals.forEach(val => {
+        const closest = idealPivots.reduce((c, p) => Math.abs(val - p) < Math.abs(val - c) ? p : c, idealPivots[0]);
+        const dist = Math.abs(val - closest);
+        const maxDist = Math.max(...values) - Math.min(...values);
+        score += 10 * (1 - (dist / maxDist));
+      });
+      const roundedScore = Math.round(score);
+      const maxScore = idealCount * 10 + 10;
+      if (roundedScore >= maxScore * 0.8) {
+        showNotification(`Great job! Score: ${roundedScore}/${maxScore}`, 'success');
+        unlockAchievement('pivot');
+      } else if (roundedScore >= maxScore * 0.5) {
+        showNotification(`Good attempt! Score: ${roundedScore}/${maxScore}`, 'success');
+      } else {
+        showNotification(`Try again! Score: ${roundedScore}/${maxScore}`, 'warning');
+      }
+      gameState.score += roundedScore;
+      updateStats();
+      setupPivotGame();
+    }
+    
+    function generateEdgeCaseArray(type) {
+      resetGame();
+      const size = 20;
+      gameState.array = [];
+      switch (type) {
+        case 'nearly-sorted':
+          for (let i = 0; i < size; i++) { gameState.array.push(i * 5); }
+          for (let i = 0; i < Math.floor(size * 0.1); i++) {
+            const idx1 = Math.floor(Math.random() * size);
+            const idx2 = Math.floor(Math.random() * size);
+            [gameState.array[idx1], gameState.array[idx2]] = [gameState.array[idx2], gameState.array[idx1]];
+          }
+          caseTitleEl.textContent = 'Nearly Sorted Array';
+          break;
+        case 'reversed':
+          for (let i = size - 1; i >= 0; i--) { gameState.array.push(i * 5); }
+          caseTitleEl.textContent = 'Reversed Array';
+          break;
+        case 'few-unique':
+          const uniq = [10,20,30,40,50];
+          for (let i = 0; i < size; i++) { gameState.array.push(uniq[Math.floor(Math.random()*uniq.length)]); }
+          caseTitleEl.textContent = 'Few Unique Values';
+          break;
+        case 'random-data':
+        default:
+          for (let i = 0; i < size; i++) { gameState.array.push(Math.floor(Math.random()*100)+1); }
+          caseTitleEl.textContent = 'Random Data';
+          break;
+      }
+      renderArray();
+      edgeCaseStats.style.display = 'block';
+      updateStepExplanation('initialize');
+      setTimeout(() => {
+        const startTime = performance.now();
+        gameState.maxRecursionDepth = 0;
+        fractalSortWithStats(gameState.array, 0, gameState.array.length - 1, 0);
+        const endTime = performance.now();
+        caseComparisonsEl.textContent = gameState.comparisonCount;
+        caseTimeEl.textContent = `${Math.round(endTime - startTime)}ms`;
+        caseDepthEl.textContent = gameState.maxRecursionDepth;
+        renderArray(true);
+      }, 500);
+    }
+    
+    // A pure JavaScript implementation of the fractal sort for testing edge cases
+    function fractalSortWithStats(arr, start, end, depth) {
+      gameState.maxRecursionDepth = Math.max(gameState.maxRecursionDepth, depth);
+      let size = end - start + 1;
+      if (size <= gameState.params.SMALL_THRESH) {
+        // Simple bubble sort for small arrays
+        for (let i = start; i < end; i++) {
+          for (let j = start; j < end; j++) {
+            gameState.comparisonCount++;
+            if (arr[j] > arr[j+1]) { [arr[j], arr[j+1]] = [arr[j+1], arr[j]]; }
+          }
+        }
+        return;
+      }
+      let pivotCount = Math.max(2, Math.floor(Math.sqrt(size)));
+      let pivotSampleCount = Math.max(pivotCount, Math.floor(pivotCount * gameState.params.PIVOT_SAMPLE_FACTOR));
+      let samples = [];
+      for (let i = 0; i < pivotSampleCount; i++) {
+        let rIndex = start + Math.floor(Math.random() * size);
+        samples.push(arr[rIndex]);
+      }
+      samples.sort((a, b) => a - b);
+      gameState.comparisonCount += samples.length * Math.log2(samples.length);
+      let cut = Math.floor(gameState.params.PIVOT_OUTLIER_FRAC * samples.length);
+      let trimmed = samples;
+      if (cut * 2 < samples.length - pivotCount) { trimmed = samples.slice(cut, samples.length - cut); }
+      let pivots = [];
+      let step = Math.max(1, Math.floor(trimmed.length / pivotCount));
+      for (let i = 0; i < pivotCount; i++) {
+        if (i * step < trimmed.length) { pivots.push(trimmed[i * step]); }
+      }
+      pivots.sort((a, b) => a - b);
+      let buckets = Array.from({ length: pivots.length + 1 }, () => []);
+      for (let i = start; i <= end; i++) {
+        let val = arr[i];
+        let b = 0;
+        while (b < pivots.length && val >= pivots[b]) { 
+          b++; 
+          gameState.comparisonCount++;
+        }
+        buckets[b].push(val);
+      }
+      for (let i = 0; i < buckets.length; i++) {
+        if (buckets[i].length > 1) {
+          fractalSortWithStats(buckets[i], 0, buckets[i].length - 1, depth + 1);
+        }
+      }
+      let idx = start;
+      for (const bucket of buckets) {
+        for (const v of bucket) { arr[idx++] = v; }
+      }
+    }
+    
+    function testParameters() {
+      const testArray = Array.from({length: 100}, () => Math.floor(Math.random() * 1000));
+      const arrayCopy = [...testArray];
+      const startTime = performance.now();
+      gameState.comparisonCount = 0;
+      gameState.maxRecursionDepth = 0;
+      fractalSortWithStats(arrayCopy, 0, arrayCopy.length - 1, 0);
+      const endTime = performance.now();
+      const timeTaken = Math.round(endTime - startTime);
+      showNotification(`Sort completed in ${timeTaken}ms with ${gameState.comparisonCount} comparisons.`, 'success');
+      let paramTested = parseInt(localStorage.getItem('paramTested') || '0');
+      paramTested++;
+      localStorage.setItem('paramTested', paramTested);
+      if (paramTested >= 5) { unlockAchievement('researcher'); }
+    }
+    
+    // ---------- NOTIFICATIONS ----------
+    function showNotification(message, type = 'success') {
+      const container = document.getElementById('notification-container');
+      const notif = document.createElement('div');
+      notif.className = `notification notification-${type}`;
+      let iconSvg = '';
+      switch(type) {
+        case 'success':
+          iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 1 0-1.06 1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                      </svg>`;
+          break;
+        case 'warning':
+          iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                      </svg>`;
+          break;
+        case 'error':
+          iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                      </svg>`;
+          break;
+        case 'info':
+          iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                      </svg>`;
+          break;
+      }
+      notif.innerHTML = `<div class="notification-icon">${iconSvg}</div>
+                         <div class="notification-message">${message}</div>
+                         <button class="notification-close" aria-label="Close notification">×</button>`;
+      container.appendChild(notif);
+      setTimeout(() => { notif.classList.add('show'); }, 10);
+      const hideTO = setTimeout(() => { hideNotification(notif); }, 5000);
+      const closeBtn = notif.querySelector('.notification-close');
+      closeBtn.addEventListener('click', () => { clearTimeout(hideTO); hideNotification(notif); });
+    }
+    
+    function hideNotification(notif) {
+      notif.classList.remove('show');
+      setTimeout(() => { if (notif.parentNode) { notif.parentNode.removeChild(notif); } }, 300);
+    }
+    
+    // ---------- ACHIEVEMENTS ----------
+    function unlockAchievement(id) {
+      if (gameState.achievements[id]) return;
+      gameState.achievements[id] = true;
+      localStorage.setItem(`achievement_${id}`, 'true');
+      const card = document.getElementById(`achievement-${id}`);
+      if (card) { card.classList.remove('locked'); card.classList.add('unlocked'); }
+      showNotification(`Achievement unlocked: ${document.querySelector(`#achievement-${id} .achievement-title`).textContent}`, 'success');
+    }
+    
+    function checkSavedAchievements() {
+      Object.keys(gameState.achievements).forEach(id => {
+        if (localStorage.getItem(`achievement_${id}`) === 'true') {
+          gameState.achievements[id] = true;
+          const card = document.getElementById(`achievement-${id}`);
+          if (card) { card.classList.remove('locked'); card.classList.add('unlocked'); }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
